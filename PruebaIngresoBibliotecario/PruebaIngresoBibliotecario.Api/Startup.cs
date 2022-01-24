@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
-
+using PruebaIngresoBibliotecario.Api.Models;
 
 
 namespace PruebaIngresoBibliotecario.Api
@@ -28,7 +28,12 @@ namespace PruebaIngresoBibliotecario.Api
 
             services.AddSwaggerDocument();
 
-            services.AddDbContext<Infrastructure.PersistenceContext>(opt =>
+            // services.AddDbContext<Infrastructure.PersistenceContext>(opt =>
+            // {
+            //     opt.UseInMemoryDatabase("PruebaIngreso");
+            // });
+
+            services.AddDbContext<PrestamoCTX>(opt =>
             {
                 opt.UseInMemoryDatabase("PruebaIngreso");
             });
