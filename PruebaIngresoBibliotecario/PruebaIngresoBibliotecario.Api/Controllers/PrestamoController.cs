@@ -7,6 +7,6 @@ namespace PruebaIngresoBibliotecario.Api.Controllers
     public class PrestamoController : ControllerBase
     {
 
-
+        
     }
 }
