@@ -34,14 +34,17 @@ namespace PruebaIngresoBibliotecario.Api.Controllers
 
         // GET api/<PrestamoController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Prestamo>> GetPrestamo(Guid id)
+        public async Task<ActionResult<Prestamo>> GetPrestamo(string id)
         {
 
-            var prestamo = await _context.Prestamo.FindAsync(id);
+
+            Guid idGuid = new Guid(id);
+
+            var prestamo = await _context.Prestamo.FindAsync(idGuid);
 
             if(prestamo == null)
             {
-                return NotFound(ErrorHelper.Response(404, $"El prestamo con id {id.ToString()} no existe"));
+                return NotFound(ErrorHelper.Response(404, $"El prestamo con id {id} no existe"));
             }
 
             return Ok(ErrorHelper.ResponseValiPrestamo(prestamo.id, prestamo.isbn, prestamo.identificacionUsuario, prestamo.tipoUsuario, prestamo.fechaMaximaDevolucion));
@@ -49,19 +52,18 @@ namespace PruebaIngresoBibliotecario.Api.Controllers
         }
 
 
+
         // POST api/<PrestamoController>
         [HttpPost]
         public async Task<ActionResult<Prestamo>> PostPrestamo(Prestamo prestamo)
-            {
+        {
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(400);
             }
 
-            var UsuarioPrestamo = await _context.Prestamo.Where(x => x.identificacionUsuario == prestamo.identificacionUsuario).AnyAsync();
-
-            if (UsuarioPrestamo && prestamo.tipoUsuario == 3)
+            if (ExistPrestamo(prestamo.identificacionUsuario) && prestamo.tipoUsuario == 3)
             {
                    return BadRequest(ErrorHelper.Response(400, $"El usuario con identificacion {prestamo.identificacionUsuario} ya tiene un libro prestado por lo cual no se le puede realizar otro prestamo"));
             }
@@ -83,8 +85,7 @@ namespace PruebaIngresoBibliotecario.Api.Controllers
                 }
 
 
-                //var guid = Guid.NewGuid();
-                //prestamo.isbn = guid.ToString();
+                //prestamo.isbn = Guid.NewGuid().ToString();
 
                 _context.Prestamo.Add(prestamo);
                 await _context.SaveChangesAsync();
@@ -108,6 +109,13 @@ namespace PruebaIngresoBibliotecario.Api.Controllers
 
             return dt;
         }
+
+        private bool ExistPrestamo(string identificacionUsuario)
+        {
+            return _context.Prestamo.Where(x => x.identificacionUsuario == identificacionUsuario).Any();
+        }
+
+
 
 
     }

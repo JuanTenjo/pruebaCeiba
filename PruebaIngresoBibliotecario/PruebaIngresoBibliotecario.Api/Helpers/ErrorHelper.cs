@@ -25,12 +25,12 @@ namespace PruebaIngresoBibliotecario.Api.Helpers
                 //Type = "C",
                 //StatusCode = StatusCode,
                 id = Id.ToString(),
-                fechaMaximaDevolucion = FechaMaximaDevolucion.ToString("dd/MM/yyyy")
+                fechaMaximaDevolucion = FechaMaximaDevolucion.ToString()
 
             };
         }
 
-        public static ResponseValiPrestamo ResponseValiPrestamo(Guid Id, Guid Isbn,string IdentificaciónUsuario, int TipoUsuario,DateTime FechaMaximaDevolucion)
+        public static ResponseValiPrestamo ResponseValiPrestamo(Guid Id, string Isbn,string IdentificacionUsuario, int TipoUsuario,DateTime FechaMaximaDevolucion)
         {
             return new ResponseValiPrestamo()
             {
@@ -38,9 +38,12 @@ namespace PruebaIngresoBibliotecario.Api.Helpers
                 //StatusCode = StatusCode,
                 id = Id.ToString(),
                 isbn = Isbn.ToString(),
-                identificaciónUsuario = IdentificaciónUsuario,
+                identificacionUsuario = IdentificacionUsuario,
                 tipoUsuario = TipoUsuario,
-                fechaMaximaDevolucion = FechaMaximaDevolucion.ToString("dd/MM/yyyy")
+
+
+
+                fechaMaximaDevolucion = FechaMaximaDevolucion.ToString("yyyy-MM-dd")
 
             };
         }
@@ -70,11 +73,11 @@ namespace PruebaIngresoBibliotecario.Api.Helpers
     {
         public string id { get; set; }
         public string isbn { get; set; }
-        public string identificaciónUsuario { get; set; }
+        public string identificacionUsuario { get; set; }
         public int tipoUsuario { get; set; }
         public string fechaMaximaDevolucion { get; set; }
 
-    }
+}
 
     
 

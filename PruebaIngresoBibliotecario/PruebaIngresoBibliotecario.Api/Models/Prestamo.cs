@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,8 +12,15 @@ namespace PruebaIngresoBibliotecario.Api.Models
         [Key]
         public Guid id { get; set; }
 
-        public Guid isbn { get; set;}
 
+        [Required(ErrorMessage = "El codigo isbn es obligatorio")]
+        [isValidGuidAttribute]
+        public string isbn { get; set; }
+
+            
+
+
+        
         [Required(ErrorMessage = "La identificaion del usuario obligatoria")]
         [MaxLength(10, ErrorMessage = "La identificaion del usuario debe ser maximo de 10 caracteres")]
         public string identificacionUsuario { get; set; }
@@ -26,4 +34,26 @@ namespace PruebaIngresoBibliotecario.Api.Models
 
 
     }
+
+    public class isValidGuidAttribute : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+
+            Guid x;
+            bool isValid = Guid.TryParse(value.ToString(), out x);
+
+            if (isValid)
+            {
+                return ValidationResult.Success;
+            }
+            else
+            {
+                return new ValidationResult("El codigo isbn no es valido");
+            }
+  
+        }
+
+    }
+
 }
