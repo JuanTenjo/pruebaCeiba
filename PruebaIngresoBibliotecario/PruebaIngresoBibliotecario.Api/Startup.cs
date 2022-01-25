@@ -7,7 +7,7 @@ using System;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using PruebaIngresoBibliotecario.Api.Models;
-
+using Microsoft.AspNetCore.Mvc;
 
 namespace PruebaIngresoBibliotecario.Api
 {
@@ -28,14 +28,19 @@ namespace PruebaIngresoBibliotecario.Api
 
             services.AddSwaggerDocument();
 
-            // services.AddDbContext<Infrastructure.PersistenceContext>(opt =>
-            // {
-            //     opt.UseInMemoryDatabase("PruebaIngreso");
-            // });
+            //services.AddDbContext<Infrastructure.PersistenceContext>(opt =>
+            //{
+            //    opt.UseInMemoryDatabase("PruebaIngreso");
+            //});
 
             services.AddDbContext<PrestamoCTX>(opt =>
             {
                 opt.UseInMemoryDatabase("PruebaIngreso");
+            });
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
             });
 
             services.AddControllers(mvcOpts =>
