@@ -34,17 +34,17 @@ namespace PruebaIngresoBibliotecario.Api.Controllers
 
         // GET api/<PrestamoController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Prestamo>> GetPrestamo(string id)
+        public async Task<ActionResult<Prestamo>> GetPrestamo(Guid id)
         {
 
             var prestamo = await _context.Prestamo.FindAsync(id);
 
             if(prestamo == null)
             {
-                return NotFound(ErrorHelper.Response(404, $"El prestamo con id {id} no existe"));
+                return NotFound(ErrorHelper.Response(404, $"El prestamo con id {id.ToString()} no existe"));
             }
 
-            return Ok(ErrorHelper.ResponseValiPrestamo(prestamo.isbn, prestamo.isbn, prestamo.identificaionUsuario, prestamo.tipoUsuario, prestamo.fechaMaximaDevolucion));
+            return Ok(ErrorHelper.ResponseValiPrestamo(prestamo.id, prestamo.isbn, prestamo.identificacionUsuario, prestamo.tipoUsuario, prestamo.fechaMaximaDevolucion));
 
         }
 
@@ -52,18 +52,18 @@ namespace PruebaIngresoBibliotecario.Api.Controllers
         // POST api/<PrestamoController>
         [HttpPost]
         public async Task<ActionResult<Prestamo>> PostPrestamo(Prestamo prestamo)
-        {
+            {
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(400);
             }
 
-            var UsuarioPrestamo = await _context.Prestamo.Where(x => x.identificaionUsuario == prestamo.identificaionUsuario).AnyAsync();
+            var UsuarioPrestamo = await _context.Prestamo.Where(x => x.identificacionUsuario == prestamo.identificacionUsuario).AnyAsync();
 
             if (UsuarioPrestamo && prestamo.tipoUsuario == 3)
             {
-                   return BadRequest(ErrorHelper.Response(400, $"El usuario con identificacion {prestamo.identificaionUsuario} ya tiene un libro prestado por lo cual no se le puede realizar otro prestamo"));
+                   return BadRequest(ErrorHelper.Response(400, $"El usuario con identificacion {prestamo.identificacionUsuario} ya tiene un libro prestado por lo cual no se le puede realizar otro prestamo"));
             }
             else
             {
@@ -83,79 +83,15 @@ namespace PruebaIngresoBibliotecario.Api.Controllers
                 }
 
 
-
-
-                var guid = Guid.NewGuid();
-
-
-                prestamo.isbn = guid.ToString();
+                //var guid = Guid.NewGuid();
+                //prestamo.isbn = guid.ToString();
 
                 _context.Prestamo.Add(prestamo);
                 await _context.SaveChangesAsync();
 
                 //return CreatedAtAction("GetPrestamo", new { id = prestamo.id_prestamo }, prestamo);
-                return Ok(ErrorHelper.ResponseRegis(prestamo.isbn,prestamo.fechaMaximaDevolucion));
+                return Ok(ErrorHelper.ResponseRegis(prestamo.id,prestamo.fechaMaximaDevolucion));
             }
-        }
-
-        // PUT api/<PrestamoController>/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult> PutPrestamo(string id_prestamo, Prestamo prestamo)
-        {
-            if(id_prestamo != prestamo.isbn)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(prestamo).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-
-                if(!PrestamoExists(id_prestamo))
-                {
-                    return NotFound();
-                }else
-                {
-                    throw;
-                }
-
-                
-            }
-
-            return NoContent();
-
-
-        }
-
-
-        // DELETE api/<PrestamoController>/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Prestamo>> DeletePrestamo(int id_prestamo)
-        {
-            var prestamo = await _context.Prestamo.FindAsync(id_prestamo);
-            
-            if(prestamo == null)
-            {
-                return NotFound();
-            }
-
-            _context.Prestamo.Remove(prestamo);
-            await _context.SaveChangesAsync();
-
-            return prestamo;
-
-        }
-
-        private bool PrestamoExists(string id_prestamo)
-        {
-
-            return _context.Prestamo.Any(e => e.isbn == id_prestamo);
-
         }
 
         static DateTime CalcularFechaEntrega(DateTime fechaPrestamo, int dias)

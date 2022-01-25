@@ -8,17 +8,14 @@ namespace PruebaIngresoBibliotecario.Api.Models
     public class Prestamo
     {
 
-        //[Key]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        //public int id_prestamo { get; set;}
-
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string isbn { get; set;}
+        public Guid id { get; set; }
+
+        public Guid isbn { get; set;}
 
         [Required(ErrorMessage = "La identificaion del usuario obligatoria")]
         [MaxLength(10, ErrorMessage = "La identificaion del usuario debe ser maximo de 10 caracteres")]
-        public string identificaionUsuario { get; set; }
+        public string identificacionUsuario { get; set; }
 
 
         [Required(ErrorMessage = "El tipo de usuario es obligatorio")]

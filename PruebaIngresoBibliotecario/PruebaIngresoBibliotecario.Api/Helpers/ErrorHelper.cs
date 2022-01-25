@@ -18,26 +18,26 @@ namespace PruebaIngresoBibliotecario.Api.Helpers
             };
         }
 
-        public static ResponseObjectRegis ResponseRegis(string Id,DateTime FechaMaximaDevolucion)
+        public static ResponseObjectRegis ResponseRegis(Guid Id,DateTime FechaMaximaDevolucion)
         {
             return new ResponseObjectRegis()
             {
                 //Type = "C",
                 //StatusCode = StatusCode,
-                id = Id,
+                id = Id.ToString(),
                 fechaMaximaDevolucion = FechaMaximaDevolucion.ToString("dd/MM/yyyy")
 
             };
         }
 
-        public static ResponseValiPrestamo ResponseValiPrestamo(string Id, string Isbn,string IdentificaciónUsuario, int TipoUsuario,DateTime FechaMaximaDevolucion)
+        public static ResponseValiPrestamo ResponseValiPrestamo(Guid Id, Guid Isbn,string IdentificaciónUsuario, int TipoUsuario,DateTime FechaMaximaDevolucion)
         {
             return new ResponseValiPrestamo()
             {
                 //Type = "C",
                 //StatusCode = StatusCode,
-                id = Id,
-                isbn = Isbn,
+                id = Id.ToString(),
+                isbn = Isbn.ToString(),
                 identificaciónUsuario = IdentificaciónUsuario,
                 tipoUsuario = TipoUsuario,
                 fechaMaximaDevolucion = FechaMaximaDevolucion.ToString("dd/MM/yyyy")
